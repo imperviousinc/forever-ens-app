@@ -181,7 +181,7 @@ export function isShortName(term) {
 export const aboutPageURL = () => {
   const lang = window.localStorage.getItem('language') || ''
 
-  return `https://foreverdomains.io/about`
+  return `https://foreverdomains.io/about/index.html`
 }
 
 export const faqPageURL = () => {
