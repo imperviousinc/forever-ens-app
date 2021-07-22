@@ -181,7 +181,13 @@ export function isShortName(term) {
 export const aboutPageURL = () => {
   const lang = window.localStorage.getItem('language') || ''
 
-  return `https://medium.com/@ca98am79/introducing-badass-domains-4d90bd48108b`
+  return `https://foreverdomains.io/about`
+}
+
+export const faqPageURL = () => {
+  const lang = window.localStorage.getItem('language') || ''
+
+  return `https://foreverdomains.io/#faq`
 }
 
 export function isRecordEmpty(value) {

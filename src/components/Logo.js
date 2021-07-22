@@ -3,13 +3,13 @@ import styled from '@emotion/styled/macro'
 import { Link } from 'react-router-dom'
 import mq from 'mediaQuery'
 
-import ENSLogo from '../assets/iconLogo.svg'
+import ForeverLogo from '../assets/forever-logo.png'
 import LogoTyped from '../assets/TypeLogo'
 
 const IconLogo = styled('img')`
-  width: 30px;
+  width: 76px;
   ${mq.medium`
-    width: 34px
+    width: 76px
   `}
 `
 
@@ -22,13 +22,13 @@ const LogoContainer = styled(Link)`
   width: auto;
 
   ${mq.medium`
-    width: 200px;
+    width: 150px;
   `}
 `
 
 const Logo = ({ color, className, to = '' }) => (
   <LogoContainer className={className} to={to}>
-    forever.domains
+    <IconLogo src={ForeverLogo} />
   </LogoContainer>
 )
 

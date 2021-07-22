@@ -17,6 +17,7 @@ import TextBubbleDefault from '../components/Icons/TextBubble'
 import QuestionMarkDefault from '../components/Icons/QuestionMark'
 import HowToUseDefault from '../components/HowToUse/HowToUse'
 import Alice from '../components/HomePage/Alice'
+import ForeverLogo from '../components/HomePage/images/ForeverLogo.png'
 import { aboutPageURL } from '../utils/utils'
 import { connect, disconnect } from '../api/web3modal'
 
@@ -361,7 +362,11 @@ export default ({ match }) => {
         </HeroTop>
         <SearchContainer>
           <>
-            <H1>.forever domains</H1>
+            <LogoLarge
+              initial={animation.initial}
+              animate={animation.animate}
+              src={ForeverLogo}
+            />
             <PermanentRegistrarLogo
               initial={animation.initial}
               animate={animation.animate}

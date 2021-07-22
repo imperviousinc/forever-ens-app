@@ -6,7 +6,7 @@ import NetworkInformation from '../NetworkInformation/NetworkInformation'
 import useNetworkInfo from '../NetworkInformation/useNetworkInfo'
 import Heart from '../Icons/Heart'
 import File from '../Icons/File'
-import { aboutPageURL } from '../../utils/utils'
+import { aboutPageURL, faqPageURL } from '../../utils/utils'
 import SpeechBubble from '../Icons/SpeechBubble'
 
 import mq from 'mediaQuery'
@@ -153,10 +153,10 @@ function SideNav({ match, isMenuOpen, toggleMenu }) {
           </NavLink>
         </li>
         <li>
-          <NavLink onClick={toggleMenu} active={url === '/faq'} to="/faq">
+          <ThirdPartyLink href={faqPageURL()}>
             <SpeechBubble />
             <span>{t('c.faq')}</span>
-          </NavLink>
+          </ThirdPartyLink>
         </li>
         <li>
           <ThirdPartyLink href={aboutPageURL()}>
