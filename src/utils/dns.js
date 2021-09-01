@@ -18,6 +18,7 @@ export function serializeRecord(name, ttl, type, value) {
 
   if (type === 'TXT' && value !== '') value = normalizeTXT(value)
   if (type === 'CNAME' && value !== '') value = bns.util.fqdn(value)
+  if (type === 'NS' && value !== '') value = bns.util.fqdn(value)
   const dns = toDNSName(name, type)
 
   return dns.name + ' ' + ttl + ' IN ' + dns.type + ' ' + value

@@ -231,6 +231,14 @@ function setState(node) {
   }
 }
 
+function normalizeRecord(record) {
+  return record
+    .trim()
+    .split(/[\s]+/)
+    .slice(4)
+    .join(' ')
+}
+
 const resolvers = {
   Query: {
     getOwner: async (_, { name }, { cache }) => {
@@ -517,12 +525,12 @@ const resolvers = {
                     .toString('hex')
                     .toUpperCase()
                 break
+              case bns.wire.types.DS:
+                // remove comments added by bns from DS
+                value = normalizeRecord(record.split(';')[0])
+                break
               default:
-                value = record
-                  .trim()
-                  .split(/[\s]+/)
-                  .slice(4)
-                  .join(' ')
+                value = normalizeRecord(record)
             }
 
             return { key, value: value }

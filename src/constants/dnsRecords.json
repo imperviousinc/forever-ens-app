@@ -1,1 +1,1 @@
-["A", "CNAME", "TXT", "TLSA (443, tcp)"]
+["A", "CNAME", "TXT", "TLSA (443, tcp)", "NS", "DS"]
