@@ -15,6 +15,7 @@ const Header = styled('header')`
     background: #121D46;
   `
       : ''}
+  background: white;
   display: flex;
   flex-direction: row;
   justify-content: center;
