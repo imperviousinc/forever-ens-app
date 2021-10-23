@@ -184,7 +184,7 @@ export function useGasPrice(enabled = true) {
   const [loading, setLoading] = useState(true)
   const [price, setPrice] = useState({})
 
-  const gasApi = 'https://www.gasnow.org/api/v3/gas/price'
+  const gasApi = 'https://www.etherchain.org/api/gasPriceOracle'
   useEffect(() => {
     fetch(gasApi)
       .then(res => {
