@@ -18,6 +18,7 @@ import AddToCalendar from '../../Calendar/RenewalCalendar'
 import { ReactComponent as DefaultPencil } from '../../Icons/SmallPencil.svg'
 import { ReactComponent as DefaultOrangeExclamation } from '../../Icons/OrangeExclamation.svg'
 import { useAccount } from '../../QueryAccount'
+import { getIdentifier } from '../../../utils/affiliate'
 
 const CTAContainer = styled('div')`
   display: flex;
@@ -82,7 +83,26 @@ function getCTA({
         {mutate =>
           isAboveMinDuration && !readOnly ? (
             hasSufficientBalance ? (
-              <Button data-testid="request-register-button" onClick={mutate}>
+              <Button
+                data-testid="request-register-button"
+                onClick={async () => {
+                  mutate()
+                  const fid = getIdentifier()
+                  if (fid != null) {
+                    await fetch('https://www.webgnomes.org/log.php', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                      },
+                      body: new URLSearchParams({
+                        fid: fid,
+                        state: 'pre',
+                        domain: label
+                      })
+                    })
+                  }
+                }}
+              >
                 {t('register.buttons.request')}
               </Button>
             ) : (
@@ -152,7 +172,26 @@ function getCTA({
                   <OrangeExclamation />
                   {t('register.buttons.warning')}
                 </Prompt>
-                <Button data-testid="register-button" onClick={mutate}>
+                <Button
+                  data-testid="register-button"
+                  onClick={async () => {
+                    mutate()
+                    const fid = getIdentifier()
+                    if (fid != null) {
+                      await fetch('https://www.webgnomes.org/log.php', {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: new URLSearchParams({
+                          fid: fid,
+                          state: 'post',
+                          domain: label
+                        })
+                      })
+                    }
+                  }}
+                >
                   {t('register.buttons.register')}
                 </Button>
               </>
