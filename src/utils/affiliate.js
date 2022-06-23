@@ -25,7 +25,10 @@ export function getIdentifier() {
   const data = localStorage.getItem('fid')
   if (data != null) {
     const parsedData = JSON.parse(data)
-    if (Date.now() < parseInt(parsedData.expiration, 10)) {
+    if (
+      Date.now() < parseInt(parsedData.expiration, 10) &&
+      /^[0-9]+$/.test(parsedData.identifier)
+    ) {
       return parsedData.identifier
     }
   }
