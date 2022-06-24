@@ -18,6 +18,7 @@ import AddToCalendar from '../../Calendar/RenewalCalendar'
 import { ReactComponent as DefaultPencil } from '../../Icons/SmallPencil.svg'
 import { ReactComponent as DefaultOrangeExclamation } from '../../Icons/OrangeExclamation.svg'
 import { useAccount } from '../../QueryAccount'
+import { logEvent } from '../../../utils/affiliate'
 
 const CTAContainer = styled('div')`
   display: flex;
@@ -82,7 +83,13 @@ function getCTA({
         {mutate =>
           isAboveMinDuration && !readOnly ? (
             hasSufficientBalance ? (
-              <Button data-testid="request-register-button" onClick={mutate}>
+              <Button
+                data-testid="request-register-button"
+                onClick={async () => {
+                  mutate()
+                  logEvent('pre', label)
+                }}
+              >
                 {t('register.buttons.request')}
               </Button>
             ) : (
@@ -152,7 +159,13 @@ function getCTA({
                   <OrangeExclamation />
                   {t('register.buttons.warning')}
                 </Prompt>
-                <Button data-testid="register-button" onClick={mutate}>
+                <Button
+                  data-testid="register-button"
+                  onClick={async () => {
+                    mutate()
+                    logEvent('post', label)
+                  }}
+                >
                   {t('register.buttons.register')}
                 </Button>
               </>
