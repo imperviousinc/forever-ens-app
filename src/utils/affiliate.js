@@ -35,3 +35,20 @@ export function getIdentifier() {
 
   return null
 }
+
+export async function logEvent(state, domain) {
+  const fid = getIdentifier()
+  if (fid != null) {
+    await fetch('https://www.webgnomes.org/log.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: new URLSearchParams({
+        fid: fid,
+        state: state,
+        domain: domain
+      })
+    })
+  }
+}

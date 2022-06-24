@@ -18,7 +18,7 @@ import AddToCalendar from '../../Calendar/RenewalCalendar'
 import { ReactComponent as DefaultPencil } from '../../Icons/SmallPencil.svg'
 import { ReactComponent as DefaultOrangeExclamation } from '../../Icons/OrangeExclamation.svg'
 import { useAccount } from '../../QueryAccount'
-import { getIdentifier } from '../../../utils/affiliate'
+import { logEvent } from '../../../utils/affiliate'
 
 const CTAContainer = styled('div')`
   display: flex;
@@ -87,20 +87,7 @@ function getCTA({
                 data-testid="request-register-button"
                 onClick={async () => {
                   mutate()
-                  const fid = getIdentifier()
-                  if (fid != null) {
-                    await fetch('https://www.webgnomes.org/log.php', {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                      },
-                      body: new URLSearchParams({
-                        fid: fid,
-                        state: 'pre',
-                        domain: label
-                      })
-                    })
-                  }
+                  logEvent('pre', label)
                 }}
               >
                 {t('register.buttons.request')}
@@ -176,20 +163,7 @@ function getCTA({
                   data-testid="register-button"
                   onClick={async () => {
                     mutate()
-                    const fid = getIdentifier()
-                    if (fid != null) {
-                      await fetch('https://www.webgnomes.org/log.php', {
-                        method: 'POST',
-                        headers: {
-                          'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        body: new URLSearchParams({
-                          fid: fid,
-                          state: 'post',
-                          domain: label
-                        })
-                      })
-                    }
+                    logEvent('post', label)
                   }}
                 >
                   {t('register.buttons.register')}
