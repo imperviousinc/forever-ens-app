@@ -5,6 +5,7 @@ export function setIdentifier() {
   const parameters = window.location.href.split('?')[1]
   if (typeof parameters !== 'undefined') {
     const searchParameters = new URLSearchParams(parameters)
+    let hasTag = false
 
     for (let keyValues of searchParameters.entries()) {
       if (/^fid$/i.test(keyValues[0]) && /^[0-9]+$/.test(keyValues[1])) {
@@ -15,13 +16,22 @@ export function setIdentifier() {
             expiration: Date.now() + IDENTIFIER_LIFETIME
           })
         )
-        break
+      } else if (
+        /^tag$/i.test(keyValues[0]) &&
+        /^[a-zA-Z0-9\-_]+$/.test(keyValues[1])
+      ) {
+        localStorage.setItem('tag', keyValues[1])
+        hasTag = true
       }
+    }
+
+    if (!hasTag && localStorage.getItem('tag') != null) {
+      localStorage.removeItem('tag')
     }
   }
 }
 
-export function getIdentifier() {
+function getLocalStorageData() {
   const data = localStorage.getItem('fid')
   if (data != null) {
     const parsedData = JSON.parse(data)
@@ -29,7 +39,14 @@ export function getIdentifier() {
       Date.now() < parseInt(parsedData.expiration, 10) &&
       /^[0-9]+$/.test(parsedData.identifier)
     ) {
-      return parsedData.identifier
+      let tag = localStorage.getItem('tag')
+      if (tag == null || !/^[a-zA-Z0-9\-_]+$/.test(tag)) {
+        tag = ''
+      }
+      return {
+        fid: parsedData.identifier,
+        tag: tag
+      }
     }
   }
 
@@ -37,15 +54,16 @@ export function getIdentifier() {
 }
 
 export async function logEvent(state, domain) {
-  const fid = getIdentifier()
-  if (fid != null) {
+  const localStorageData = getLocalStorageData()
+  if (localStorageData != null) {
     await fetch('https://www.webgnomes.org/log.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       body: new URLSearchParams({
-        fid: fid,
+        fid: localStorageData.fid,
+        tag: localStorageData.tag,
         state: state,
         domain: domain
       })
