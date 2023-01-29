@@ -2,7 +2,7 @@ import { useEffect, useReducer, useRef, useState } from 'react'
 import getEtherPrice from 'api/price'
 import { useLocation } from 'react-router-dom'
 import { loggedIn, logout } from './IPFS/auth'
-import { getBlock } from '@ensdomains/ui'
+import { getBlock, getProvider, ethers } from '@ensdomains/ui'
 
 export function useDocumentTitle(title) {
   useEffect(() => {
@@ -152,6 +152,7 @@ export function useInterval(callback, delay) {
     function tick() {
       savedCallback.current()
     }
+
     if (delay !== null) {
       let id = setInterval(tick, delay)
       return () => clearInterval(id)
@@ -180,22 +181,42 @@ export function useEthPrice(enabled = true) {
   }
 }
 
+// Implements EIP-1559 to estimate gas price
+// Based on upstream implementation + pulls fee data manually using eth_feeHistory
 export function useGasPrice(enabled = true) {
   const [loading, setLoading] = useState(true)
   const [price, setPrice] = useState({})
 
-  const gasApi = 'https://www.etherchain.org/api/gasPriceOracle'
-  useEffect(() => {
-    fetch(gasApi)
-      .then(res => {
-        return res.json()
-      })
-      .then(({ data }) => {
-        setPrice(data)
+  useEffect(async () => {
+    try {
+      const run = async () => {
+        const provider = await getProvider()
+
+        // send raw RPC call to get fee data
+        // since this repo still uses a legacy version of ethers.js
+        const feeData = await provider.send('eth_feeHistory', [1, 'latest', []])
+
+        if (feeData && feeData.baseFeePerGas) {
+          const baseFeeWei = ethers.utils.formatUnits(
+            feeData.baseFeePerGas[0],
+            'wei'
+          )
+          const price = {
+            slow: baseFeeWei + 2 * Math.pow(10, 9),
+            fast: baseFeeWei * 1.1 + 2 * Math.pow(10, 9)
+          }
+          setPrice(price)
+        } else {
+          setPrice({ slow: 0, fast: 0 })
+        }
         setLoading(false)
-      })
-      .catch(() => '') // ignore error
+      }
+      run()
+    } catch (e) {
+      console.error('useGasPrice error: ', e)
+    }
   }, [enabled])
+
   return {
     loading,
     price
